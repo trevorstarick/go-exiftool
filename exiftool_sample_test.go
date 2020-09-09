@@ -3,7 +3,7 @@ package exiftool_test
 import (
 	"fmt"
 
-	"github.com/barasher/go-exiftool"
+	"github.com/trevorstarick/go-exiftool"
 )
 
 func ExampleExiftool() {
