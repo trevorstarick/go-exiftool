@@ -1,7 +1,6 @@
 package exiftool
 
 import (
-	"errors"
 	"fmt"
 	"strconv"
 )
@@ -11,9 +10,6 @@ const (
 	defaultFloat  = float64(0)
 	defaultInt    = int64(0)
 )
-
-// ErrKeyNotFound is a sentinel error used when a queried key does not exist
-var ErrKeyNotFound = errors.New("key not found")
 
 // FileMetadata is a structure that represents an exiftool extraction. File contains the
 // filename that had to be extracted. If anything went wrong, Err will not be nil. Fields
@@ -29,7 +25,7 @@ type FileMetadata struct {
 func (fm FileMetadata) GetString(k string) (string, error) {
 	v, found := fm.Fields[k]
 	if !found {
-		return defaultString, ErrKeyNotFound
+		return defaultString, fmt.Errorf("key not found (%v)", k)
 	}
 
 	return toString(v), nil
@@ -53,7 +49,7 @@ func toString(v interface{}) string {
 func (fm FileMetadata) GetFloat(k string) (float64, error) {
 	v, found := fm.Fields[k]
 	if !found {
-		return defaultFloat, ErrKeyNotFound
+		return defaultFloat, fmt.Errorf("key not found (%v)", k)
 	}
 
 	switch v := v.(type) {
@@ -84,7 +80,7 @@ func toFloatFallback(str string) (float64, error) {
 func (fm FileMetadata) GetInt(k string) (int64, error) {
 	v, found := fm.Fields[k]
 	if !found {
-		return defaultInt, ErrKeyNotFound
+		return defaultInt, fmt.Errorf("key not found (%v)", k)
 	}
 
 	switch v := v.(type) {
@@ -114,7 +110,7 @@ func toIntFallback(str string) (int64, error) {
 func (fm FileMetadata) GetStrings(k string) ([]string, error) {
 	v, found := fm.Fields[k]
 	if !found {
-		return []string{}, ErrKeyNotFound
+		return []string{}, fmt.Errorf("key not found (%v)", k)
 	}
 
 	switch v := v.(type) {
